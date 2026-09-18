@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pathway — Spec Sheet (tokens & component states)</title>
+<style>
+  :root{
+    --bg-canvas:#F1F6FA; --bg-surface:#FFFFFF; --bg-sunken:#E9F1F6;
+    --text-primary:#12283A; --text-secondary:#46586A; --text-muted:#5B6F82; --text-faint:#64788C;
+    --border:#D8E4EC; --border-strong:#7E97AB;
+    --accent:#0E7490; --accent-hover:#155E75; --accent-active:#0B4A5C; --accent-soft:#E0F0F4; --accent-ink:#0B4A5C;
+    --success:#15803D; --success-tint:#E7F4EB; --success-ink:#146C36;
+    --warning:#B45309; --warning-tint:#FCF0E0; --warning-ink:#9A4607;
+    --error:#B42318; --error-tint:#FCEBEA; --error-ink:#B42318;
+    --info:#1665A6; --info-tint:#E8F1F9;
+    --c1-t:#E4EEF8; --c1-i:#215E90; --c2-t:#E3F2F4; --c2-i:#0F6473; --c3-t:#EFEAF6; --c3-i:#5D448B;
+    --c4-t:#FBF1DF; --c4-i:#8F5B0A; --c5-t:#ECEFF3; --c5-i:#44546A; --c6-t:#EDF3E4; --c6-i:#4F6B21;
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px;
+    --r-sm:6px; --r-md:10px; --r-lg:12px; --r-pill:999px;
+    --shadow-1:0 1px 2px rgba(16,42,67,.08); --shadow-2:0 4px 12px rgba(16,42,67,.10); --shadow-3:0 12px 32px rgba(16,42,67,.16);
+    --dur-fast:120ms; --dur:180ms; --dur-slow:240ms; --ease:cubic-bezier(.2,0,0,1);
+    --font-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font:15px/24px var(--font-sans); color:var(--text-primary); background:var(--bg-canvas); padding:40px 20px 96px}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:28px;line-height:34px;font-weight:700;letter-spacing:-.015em}
+  .lede{color:var(--text-secondary);max-width:78ch;margin:6px 0 28px}
+  section{margin-bottom:40px}
+  h2{font-size:20px;line-height:26px;font-weight:600;margin-bottom:4px}
+  .sec-note{font-size:13px;line-height:20px;color:var(--text-muted);margin-bottom:14px}
+  .panel{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-1);padding:24px}
+  .rowline{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:14px}
+  .rowline:last-child{margin-bottom:0}
+  .lbl{font:600 12px/16px var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted);min-width:110px}
+  code{font:12.5px/18px var(--font-mono);background:var(--bg-sunken);padding:1px 5px;border-radius:4px}
+  /* swatches */
+  .sw{width:132px;border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden}
+  .sw .fill{height:44px}
+  .sw .meta{padding:6px 8px;background:#fff;font:11.5px/15px var(--font-mono);color:var(--text-secondary)}
+  .sw .meta b{display:block;font:600 12px/16px var(--font-sans);color:var(--text-primary)}
+  /* type ramp */
+  .t{border-bottom:1px solid var(--border);padding:10px 0;display:flex;gap:16px;align-items:baseline}
+  .t:last-child{border:0}
+  .t .name{font:11.5px/16px var(--font-mono);color:var(--text-muted);width:110px;flex:none}
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border-radius:var(--r-sm);font:600 15px/22px var(--font-sans);border:1px solid transparent;cursor:pointer;transition:background var(--dur-fast) var(--ease),box-shadow var(--dur) var(--ease),transform var(--dur) var(--ease)}
+  .btn.sm{height:32px;padding:0 12px;font-size:14px}
+  .btn.primary{background:var(--accent);color:#fff}
+  .btn.primary.is-hover{background:var(--accent-hover)}
+  .btn.primary.is-focus{outline:2px solid var(--accent);outline-offset:2px}
+  .btn.primary.is-active{background:var(--accent-active);transform:translateY(1px)}
+  .btn.primary.is-disabled{opacity:.4;cursor:not-allowed}
+  .btn.secondary{background:#fff;border-color:var(--border-strong);color:var(--accent-ink)}
+  .btn.secondary.is-hover{background:var(--bg-sunken)}
+  .btn.ghost{background:transparent;color:var(--text-secondary)}
+  .btn.ghost.is-hover{background:var(--bg-sunken);color:var(--text-primary)}
+  .btn.destruct{background:#fff;border-color:var(--error);color:var(--error-ink)}
+  .btn.destruct.is-hover{background:var(--error-tint)}
+  .spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  /* inputs */
+  .inp{height:40px;padding:0 12px;border:1px solid var(--border-strong);border-radius:var(--r-sm);background:#fff;font:15px/24px var(--font-sans);color:var(--text-primary);width:260px;max-width:100%}
+  .inp::placeholder{color:var(--text-muted)}
+  .inp.is-focus{outline:2px solid var(--accent);outline-offset:2px;border-color:var(--accent)}
+  .inp.is-error{border-color:var(--error)}
+  .inp.is-disabled{background:var(--bg-sunken);color:var(--text-muted);cursor:not-allowed}
+  .err{font:12px/16px var(--font-sans);color:var(--error-ink);margin-top:4px}
+  .counter{font:12px/16px var(--font-sans);color:var(--text-muted);text-align:right;width:260px}
+  .counter.warn{color:var(--warning-ink)}
+  /* chips */
+  .chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:var(--r-pill);font:600 13px/20px var(--font-sans)}
+  .chip .dot{width:10px;height:10px;border-radius:50%}
+  .chip.sm{height:24px;padding:0 10px;font-size:12px}
+  .chip.cat1{background:var(--c1-t);color:var(--c1-i)} .chip.cat1 .dot{background:var(--c1-i)}
+  .chip.cat2{background:var(--c2-t);color:var(--c2-i)} .chip.cat2 .dot{background:var(--c2-i)}
+  .chip.cat3{background:var(--c3-t);color:var(--c3-i)} .chip.cat3 .dot{background:var(--c3-i)}
+  .chip.cat4{background:var(--c4-t);color:var(--c4-i)} .chip.cat4 .dot{background:var(--c4-i)}
+  .chip.cat5{background:var(--c5-t);color:var(--c5-i)} .chip.cat5 .dot{background:var(--c5-i)}
+  .chip.cat6{background:var(--c6-t);color:var(--c6-i)} .chip.cat6 .dot{background:var(--c6-i)}
+  .chip.st-success{background:var(--success-tint);color:var(--success-ink)}
+  .chip.st-warning{background:var(--warning-tint);color:var(--warning-ink)}
+  .chip.st-error{background:var(--error-tint);color:var(--error-ink)}
+  .chip.st-info{background:var(--info-tint);color:var(--info)}
+  .chip.st-muted{background:var(--bg-sunken);color:var(--text-muted)}
+  /* dots */
+  .dots{display:inline-flex;gap:8px;align-items:center}
+  .dots .d{width:18px;height:18px;border-radius:50%;border:2px solid var(--border-strong);background:#fff;padding:0;cursor:pointer;transition:transform var(--dur-fast) var(--ease)}
+  .dots .d.fill{background:var(--accent);border-color:var(--accent)}
+  .dots .d.cur{box-shadow:0 0 0 4px var(--accent-soft)}
+  .dots .d.is-focus{outline:2px solid var(--accent);outline-offset:2px}
+  .dots .d.ghost{width:14px;height:14px;border:2px dashed var(--warning);background:transparent;cursor:default}
+  .dots.ro .d{width:14px;height:14px;cursor:default}
+  .word{font:600 15px/22px var(--font-sans)}
+  .expect{font:12px/16px var(--font-sans);color:var(--text-secondary);display:inline-flex;align-items:center;gap:6px}
+  .meaning{background:var(--accent-soft);color:var(--accent-ink);border-radius:var(--r-md);padding:12px 14px;font:16px/26px var(--font-sans);max-width:560px}
+  .meaning.empty{background:var(--bg-sunken);color:var(--text-muted);font-size:15px;line-height:24px}
+  /* cards */
+  .card{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-1);padding:20px;transition:box-shadow var(--dur) var(--ease),transform var(--dur) var(--ease)}
+  .card.clickable.is-hover{box-shadow:var(--shadow-2);transform:translateY(-1px)}
+  .person{width:280px}
+  .person .top{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+  .avatar{width:40px;height:40px;border-radius:50%;background:var(--accent-soft);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font:600 15px/1 var(--font-sans);border:1px solid var(--border);flex:none}
+  .avatar.lg{width:56px;height:56px;font-size:19px}
+  .nm{font:600 17px/24px var(--font-sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rl{font:13px/20px var(--font-sans);color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .prog{height:8px;border-radius:var(--r-pill);background:var(--bg-sunken);overflow:hidden;margin:8px 0 4px}
+  .prog i{display:block;height:100%;background:var(--accent);border-radius:var(--r-pill)}
+  .cap{font:12px/16px var(--font-sans);color:var(--text-muted)}
+  .skillcard{max-width:620px;border-left:3px solid var(--accent)}
+  .skillcard.unrated{border-left-color:var(--border)}
+  .skillcard h3{font:600 17px/24px var(--font-sans);margin-bottom:8px}
+  /* rails */
+  .rail{list-style:none;display:flex;flex-direction:column;gap:4px;width:240px}
+  .rail li{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:var(--r-sm);font:15px/22px var(--font-sans);color:var(--text-secondary)}
+  .rail .st{width:14px;height:14px;border-radius:50%;border:2px solid var(--border-strong);background:#fff;flex:none}
+  .rail li.done{color:var(--text-primary)} .rail li.done .st{background:var(--success);border-color:var(--success)}
+  .rail li.cur{background:var(--accent-soft);color:var(--accent-ink);font-weight:600} .rail li.cur .st{background:var(--accent);border-color:var(--accent)}
+  .rail .cov{margin-left:auto;font:12px/16px var(--font-mono);color:var(--text-muted)}
+  .stepper{display:flex;align-items:center;gap:8px;width:100%;max-width:520px}
+  .stepper .st{width:12px;height:12px;border-radius:50%;border:2px solid var(--border-strong);background:#fff;flex:none}
+  .stepper .st.done{background:var(--success);border-color:var(--success)}
+  .stepper .st.cur{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+  .stepper .bar{flex:1;height:3px;background:var(--bg-sunken);border-radius:2px}
+  .stepper .bar.done{background:var(--success)}
+  /* gap bracket */
+  .gap{display:inline-flex;align-items:center;gap:8px;font:13px/20px var(--font-sans);color:var(--warning-ink)}
+  .gap.meet{color:var(--success-ink)} .gap.exceed{color:var(--info)}
+  .gap svg{flex:none}
+  /* spark */
+  .spark{display:inline-flex;align-items:center;gap:6px;font:12px/16px var(--font-sans);color:var(--text-secondary)}
+  /* toast / empty / skeleton */
+  .toast{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--border);border-radius:var(--r-md);box-shadow:var(--shadow-2);padding:10px 14px;font:15px/22px var(--font-sans)}
+  .empty{max-width:420px;text-align:center;padding:28px 20px;background:#fff;border:1px dashed var(--border-strong);border-radius:var(--r-lg)}
+  .empty h3{font:600 17px/24px var(--font-sans);margin:10px 0 4px}
+  .empty p{font:13px/20px var(--font-sans);color:var(--text-secondary);margin-bottom:14px}
+  .sk{background:var(--bg-sunken);border-radius:var(--r-pill)}
+  .skcard{width:280px;background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;display:flex;gap:12px}
+  /* spacing + radius + shadow */
+  .spbar{display:flex;align-items:flex-end;gap:10px}
+  .spbar div{background:var(--accent);border-radius:2px}
+  .rad div{width:64px;height:44px;background:var(--accent-soft);border:1px solid var(--accent)}
+  .shd div{width:90px;height:56px;background:#fff;border:1px solid var(--border);border-radius:var(--r-lg)}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Pathway — Spec Sheet</h1>
+<p class="lede">Visual appendix to <code>pathway-design-spec.md</code>. Every value below is the locked token value; forced state classes (<code>.is-hover</code>, <code>.is-focus</code>, …) show states side by side for QA. Not a redesign — a proof sheet.</p>
+
+<section>
+  <h2>1 · Color tokens</h2>
+  <p class="sec-note">Text pairs measured: primary 15.1:1 / secondary 7.33:1 / muted 5.2:1 on white; accent 5.36:1 both ways; status inks on tints ≥5.7:1; <code>--border-strong</code> 3.04:1 (meaningful boundaries, on white surfaces only).</p>
+  <div class="rowline">
+    <div class="sw"><div class="fill" style="background:#F1F6FA"></div><div class="meta"><b>bg-canvas</b>F1F6FA</div></div>
+    <div class="sw"><div class="fill" style="background:#FFFFFF"></div><div class="meta"><b>bg-surface</b>FFFFFF</div></div>
+    <div class="sw"><div class="fill" style="background:#E9F1F6"></div><div class="meta"><b>bg-sunken</b>E9F1F6</div></div>
+    <div class="sw"><div class="fill" style="background:#12283A"></div><div class="meta"><b>text-primary</b>12283A</div></div>
+    <div class="sw"><div class="fill" style="background:#46586A"></div><div class="meta"><b>text-secondary</b>46586A</div></div>
+    <div class="sw"><div class="fill" style="background:#5B6F82"></div><div class="meta"><b>text-muted</b>5B6F82</div></div>
+    <div class="sw"><div class="fill" style="background:#D8E4EC"></div><div class="meta"><b>border</b>D8E4EC</div></div>
+    <div class="sw"><div class="fill" style="background:#7E97AB"></div><div class="meta"><b>border-strong</b>7E97AB</div></div>
+  </div>
+  <div class="rowline">
+    <div class="sw"><div class="fill" style="background:#0E7490"></div><div class="meta"><b>accent</b>0E7490</div></div>
+    <div class="sw"><div class="fill" style="background:#155E75"></div><div class="meta"><b>accent-hover</b>155E75</div></div>
+    <div class="sw"><div class="fill" style="background:#0B4A5C"></div><div class="meta"><b>accent-active</b>0B4A5C</div></div>
+    <div class="sw"><div class="fill" style="background:#E0F0F4"></div><div class="meta"><b>accent-soft</b>E0F0F4</div></div>
+    <div class="sw"><div class="fill" style="background:#15803D"></div><div class="meta"><b>success</b>15803D</div></div>
+    <div class="sw"><div class="fill" style="background:#B45309"></div><div class="meta"><b>warning</b>B45309</div></div>
+    <div class="sw"><div class="fill" style="background:#B42318"></div><div class="meta"><b>error</b>B42318</div></div>
+    <div class="sw"><div class="fill" style="background:#1665A6"></div><div class="meta"><b>info</b>1665A6</div></div>
+  </div>
+  <div class="rowline">
+    <div class="sw"><div class="fill" style="background:#E4EEF8"></div><div class="meta"><b>cat Technical</b>E4EEF8 / 215E90</div></div>
+    <div class="sw"><div class="fill" style="background:#E3F2F4"></div><div class="meta"><b>cat Behavioral</b>E3F2F4 / 0F6473</div></div>
+    <div class="sw"><div class="fill" style="background:#EFEAF6"></div><div class="meta"><b>cat Management</b>EFEAF6 / 5D448B</div></div>
+    <div class="sw"><div class="fill" style="background:#FBF1DF"></div><div class="meta"><b>cat Leadership</b>FBF1DF / 8F5B0A</div></div>
+    <div class="sw"><div class="fill" style="background:#ECEFF3"></div><div class="meta"><b>cat Compliance</b>ECEFF3 / 44546A</div></div>
+    <div class="sw"><div class="fill" style="background:#EDF3E4"></div><div class="meta"><b>cat Social Impact</b>EDF3E4 / 4F6B21</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>2 · Type ramp</h2>
+  <div class="panel">
+    <div class="t"><span class="name">t-display 28/34 700</span><span style="font-size:28px;line-height:34px;font-weight:700;letter-spacing:-.015em">Growth map</span></div>
+    <div class="t"><span class="name">t-title 24/30 700</span><span style="font-size:24px;line-height:30px;font-weight:700;letter-spacing:-.01em">Ananya Menon</span></div>
+    <div class="t"><span class="name">t-h2 20/26 600</span><span style="font-size:20px;line-height:26px;font-weight:600">Skill chapters</span></div>
+    <div class="t"><span class="name">t-h3 17/24 600</span><span style="font-size:17px;line-height:24px;font-weight:600">JavaScript / TypeScript</span></div>
+    <div class="t"><span class="name">t-body-lg 16/26</span><span style="font-size:16px;line-height:26px">Handles day-to-day work independently; needs help only on unusual problems.</span></div>
+    <div class="t"><span class="name">t-body 15/24</span><span style="font-size:15px;line-height:24px">Assessment draft saved automatically as you rate.</span></div>
+    <div class="t"><span class="name">t-sm 13/20</span><span style="font-size:13px;line-height:20px;color:var(--text-secondary)">Senior Engineer · Engineering · Manager: R. Iyer</span></div>
+    <div class="t"><span class="name">t-caption 12/16 500</span><span style="font-size:12px;line-height:16px;font-weight:500;color:var(--text-muted)">Updated 14 Sep 2026, 10:42</span></div>
+    <div class="t"><span class="name">t-eyebrow 12/16 600</span><span style="font-size:12px;line-height:16px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted)">Northwind Labs — People Development</span></div>
+    <div class="t"><span class="name">t-mono 12.5/18</span><span style="font:12.5px/18px var(--font-mono);color:var(--text-secondary)">EMP-1042 · 2026-H2 · 18-09-2026</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>3 · Spacing · radius · shadow</h2>
+  <div class="panel">
+    <div class="rowline"><span class="lbl">Space scale</span>
+      <div class="spbar">
+        <div style="width:4px;height:4px"></div><div style="width:8px;height:8px"></div><div style="width:12px;height:12px"></div><div style="width:16px;height:16px"></div><div style="width:20px;height:20px"></div><div style="width:24px;height:24px"></div><div style="width:32px;height:32px"></div><div style="width:40px;height:40px"></div><div style="width:48px;height:48px"></div><div style="width:64px;height:64px"></div>
+      </div>
+    </div>
+    <div class="rowline"><span class="lbl">4 · 8 · 12 · 16 · 20 · 24 · 32 · 40 · 48 · 64</span></div>
+    <div class="rowline"><span class="lbl">Radius</span>
+      <div class="rad" style="display:flex;gap:12px">
+        <div style="border-radius:6px"></div><div style="border-radius:10px"></div><div style="border-radius:12px"></div><div style="border-radius:999px"></div>
+      </div><span class="cap">sm 6 · md 10 · lg 12 · pill</span>
+    </div>
+    <div class="rowline"><span class="lbl">Shadow</span>
+      <div class="shd" style="display:flex;gap:16px">
+        <div style="box-shadow:var(--shadow-1)"></div><div style="box-shadow:var(--shadow-2)"></div><div style="box-shadow:var(--shadow-3)"></div>
+      </div><span class="cap">1 rest · 2 hover/popover · 3 modal/sheet</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>4 · Buttons — all states</h2>
+  <div class="panel">
+    <div class="rowline"><span class="lbl">Primary</span>
+      <button class="btn primary">Save &amp; continue</button>
+      <button class="btn primary is-hover">Hover</button>
+      <button class="btn primary is-focus">Focus</button>
+      <button class="btn primary is-active">Active</button>
+      <button class="btn primary is-disabled" title="3 skills left to rate">Disabled</button>
+      <button class="btn primary" aria-busy="true"><span class="spin"></span>Saving…</button>
+    </div>
+    <div class="rowline"><span class="lbl">Secondary</span>
+      <button class="btn secondary">Save draft</button><button class="btn secondary is-hover">Hover</button><button class="btn secondary sm">Small 32</button>
+    </div>
+    <div class="rowline"><span class="lbl">Ghost / Destruct</span>
+      <button class="btn ghost">Exit</button><button class="btn ghost is-hover">Hover</button>
+      <button class="btn destruct">Discard draft</button><button class="btn destruct is-hover">Hover</button>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>5 · Inputs — all states</h2>
+  <div class="panel">
+    <div class="rowline"><span class="lbl">Default / Focus</span>
+      <input class="inp" placeholder="Search employees, skills…">
+      <input class="inp is-focus" value="Ananya Menon">
+    </div>
+    <div class="rowline"><span class="lbl">Error</span>
+      <div><input class="inp is-error" value="" aria-invalid="true"><div class="err">Target date must be today or later.</div></div>
+    </div>
+    <div class="rowline"><span class="lbl">Disabled + counter</span>
+      <input class="inp is-disabled" value="Read-only in employee role" disabled>
+      <div><div class="counter warn">562 / 600</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>6 · Proficiency dots · meaning panel · chips</h2>
+  <div class="panel">
+    <div class="rowline"><span class="lbl">Editable (radio)</span>
+      <span class="dots"><button class="d fill"></button><button class="d fill"></button><button class="d fill cur is-focus"></button><button class="d"></button><button class="d"></button></span>
+      <span class="word">Intermediate</span>
+      <span class="expect"><span class="dots"><span class="d ghost"></span></span>Role expects: Advanced</span>
+    </div>
+    <div class="rowline"><span class="lbl">Read-only</span>
+      <span class="dots ro"><span class="d fill"></span><span class="d fill"></span><span class="d fill"></span><span class="d fill"></span><span class="d"></span></span>
+      <span class="word">Advanced</span>
+    </div>
+    <div class="rowline"><span class="lbl">Meaning panel</span>
+      <div class="meaning"><b>Intermediate —</b> Handles day-to-day work independently; needs help only on unusual problems.</div>
+    </div>
+    <div class="rowline"><span class="lbl">∅ meaning</span>
+      <div class="meaning empty">Select a level to see what it means.</div>
+    </div>
+    <div class="rowline"><span class="lbl">Category chips</span>
+      <span class="chip cat1"><span class="dot"></span>Technical</span>
+      <span class="chip cat2"><span class="dot"></span>Behavioral</span>
+      <span class="chip cat3"><span class="dot"></span>Management</span>
+      <span class="chip cat4"><span class="dot"></span>Leadership</span>
+      <span class="chip cat5"><span class="dot"></span>Compliance</span>
+      <span class="chip cat6"><span class="dot"></span>Social Impact</span>
+    </div>
+    <div class="rowline"><span class="lbl">Status chips</span>
+      <span class="chip sm st-info">◔ Draft</span><span class="chip sm st-info">◔ In progress</span>
+      <span class="chip sm st-success">✓ Submitted</span><span class="chip sm st-muted">○ Not started</span>
+      <span class="chip sm st-warning">! Due soon</span><span class="chip sm st-warning">→ Development required</span>
+      <span class="chip sm st-success">✓ On track</span><span class="chip sm st-error">⛔ Critical gap</span>
+    </div>
+    <div class="rowline"><span class="lbl">Progress</span>
+      <div style="width:240px"><div class="prog"><i style="width:75%"></i></div><div class="cap">18 of 24 skills · 75%</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>7 · Gap bracket · spark · cards</h2>
+  <div class="panel grid2">
+    <div>
+      <div class="rowline"><span class="lbl">Gap (2 levels)</span>
+        <span class="gap"><span class="dots ro"><span class="d fill"></span><span class="d fill"></span><span class="d fill"></span></span>
+        <svg width="24" height="14" viewBox="0 0 24 14" aria-hidden="true"><path d="M1 1v6h22V1" fill="none" stroke="#B45309" stroke-width="2"/></svg>
+        <span class="dots ro"><span class="d" style="border-style:dashed;border-color:#B45309"></span></span>
+        Gap: 2 levels — development plan suggested</span>
+      </div>
+      <div class="rowline"><span class="lbl">Meets / Exceeds</span>
+        <span class="gap meet">✓ Meets role expectation</span>
+        <span class="gap exceed">↑ Exceeds by 1 level</span>
+      </div>
+      <div class="rowline"><span class="lbl">Spark</span>
+        <span class="spark"><svg width="56" height="18" viewBox="0 0 56 18" aria-hidden="true"><line x1="6" y1="13" x2="50" y2="6" stroke="#15803D" stroke-width="2"/><circle cx="6" cy="13" r="3" fill="#15803D"/><circle cx="50" cy="6" r="3" fill="#15803D"/></svg>▲ +0.4 since Mar</span>
+        <span class="spark"><svg width="56" height="18" viewBox="0 0 56 18" aria-hidden="true"><line x1="6" y1="8" x2="50" y2="11" stroke="#B45309" stroke-width="2"/><circle cx="6" cy="8" r="3" fill="#B45309"/><circle cx="50" cy="11" r="3" fill="#B45309"/></svg>▼ −0.2 since Mar</span>
+      </div>
+    </div>
+    <div>
+      <div class="rowline" style="align-items:flex-start"><span class="lbl">Person card D / H</span>
+        <article class="card clickable person">
+          <div class="top"><span class="avatar">AM</span><div style="min-width:0"><div class="nm">Ananya Menon</div><div class="rl">Senior Engineer · Engineering</div></div></div>
+          <div class="prog"><i style="width:100%"></i></div>
+          <div class="rowline" style="margin:8px 0 0"><span class="chip sm st-warning">3 gaps</span><span class="cap">Assessed 12 Sep 2026</span></div>
+        </article>
+        <article class="card clickable person is-hover">
+          <div class="top"><span class="avatar">RD</span><div style="min-width:0"><div class="nm">Rohan Deshpande</div><div class="rl">Product Manager · Product</div></div></div>
+          <div class="prog"><i style="width:60%"></i></div>
+          <div class="rowline" style="margin:8px 0 0"><span class="chip sm st-info">◔ Draft</span><span class="cap">Due 30 Sep 2026</span></div>
+        </article>
+      </div>
+      <div class="rowline" style="align-items:flex-start"><span class="lbl">Skill card rated</span>
+        <article class="card skillcard">
+          <h3>System design</h3>
+          <div class="meaning" style="margin-bottom:12px"><b>Advanced —</b> Designs multi-service solutions; trades offs explained and reviewed.</div>
+          <span class="dots ro"><span class="d fill"></span><span class="d fill"></span><span class="d fill"></span><span class="d fill"></span><span class="d"></span></span>
+          <span class="word">Advanced</span>
+          <span class="expect"><span class="dots"><span class="d ghost"></span></span>Role expects: Advanced</span>
+          <div class="gap meet" style="margin-top:8px">✓ Meets role expectation</div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>8 · Rails — wizard progress (desktop vertical / mobile horizontal)</h2>
+  <div class="panel grid2">
+    <div>
+      <ol class="rail">
+        <li class="done"><span class="st"></span>Technical<span class="cov">5/5</span></li>
+        <li class="cur"><span class="st"></span>Behavioral<span class="cov">3/5</span></li>
+        <li><span class="st"></span>Management<span class="cov">0/4</span></li>
+        <li><span class="st"></span>Leadership<span class="cov">0/4</span></li>
+        <li><span class="st"></span>Review &amp; reflect<span class="cov">⚑</span></li>
+      </ol>
+    </div>
+    <div>
+      <div class="stepper">
+        <span class="st done"></span><span class="bar done"></span>
+        <span class="st cur"></span><span class="bar"></span>
+        <span class="st"></span><span class="bar"></span>
+        <span class="st"></span><span class="bar"></span>
+        <span class="st"></span>
+      </div>
+      <div class="cap" style="margin-top:8px">Category 2 of 5 · Behavioral · 60% · Saved 14:03</div>
+      <div class="rowline" style="margin-top:16px"><span class="lbl">Journey rail</span>
+        <div class="stepper" style="max-width:420px">
+          <span class="st done" style="background:var(--success)"></span><span class="bar done"></span>
+          <span class="st cur"></span><span class="bar"></span>
+          <span class="st"></span>
+        </div>
+      </div>
+      <div class="cap">Mar 2026 assessment · today · next review Jan 2027</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>9 · Toast · empty · skeleton</h2>
+  <div class="panel grid2">
+    <div>
+      <div class="rowline"><span class="lbl">Toast</span>
+        <span class="toast"><span style="color:var(--success)">✓</span> Assessment submitted — report ready. <a href="#" style="color:var(--accent)">View</a></span>
+      </div>
+      <div class="rowline"><span class="lbl">Empty (no gaps)</span>
+        <div class="empty">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#146C36" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>
+          <h3>All skills meet role expectations</h3>
+          <p>No gaps recorded for this cycle. Revisit at the next review or add stretch goals from Development.</p>
+          <button class="btn secondary sm">Add stretch goal</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="rowline" style="align-items:flex-start"><span class="lbl">Skeleton card</span>
+        <div class="skcard">
+          <span class="sk" style="width:40px;height:40px;border-radius:50%;flex:none"></span>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+            <span class="sk" style="height:12px;width:70%"></span>
+            <span class="sk" style="height:10px;width:45%"></span>
+            <span class="sk" style="height:8px;width:100%"></span>
+          </div>
+        </div>
+      </div>
+      <div class="rowline"><span class="lbl">Skeleton wheel</span>
+        <svg width="120" height="120" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,8 86,29 86,71 50,92 14,71 14,29" fill="#E9F1F6"/></svg>
+        <span class="cap">static tint under reduced motion; shimmer otherwise</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<p class="sec-note">End of sheet. Build reference: <code>pathway-design-spec.md</code> §3 tokens, §4 components, §7 states, §11 QA gate.</p>
+</div>
+</body>
+</html>

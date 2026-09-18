@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Direction Boards — Employee Skills Platform</title>
+<style>
+  :root{
+    --ink:#1c2430; --ink2:#55607a; --line:#e3e6ec; --canvas:#f2f3f6; --sheet:#ffffff;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink); background:var(--canvas); padding:40px 20px 80px;}
+  .wrap{max-width:1180px; margin:0 auto;}
+  header.intro{margin-bottom:34px;}
+  header.intro h1{font-size:26px; letter-spacing:-.01em;}
+  header.intro p{color:var(--ink2); max-width:70ch; margin-top:6px;}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(520px,1fr)); gap:26px;}
+  @media (max-width:560px){ .grid{grid-template-columns:1fr;} }
+  .board{background:var(--sheet); border:1px solid var(--line); border-radius:10px; overflow:hidden; display:flex; flex-direction:column;}
+  .board .head{padding:18px 20px 14px; border-bottom:1px solid var(--line); display:flex; align-items:baseline; gap:10px;}
+  .board .head .tag{font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing:.08em; padding:5px 7px; border-radius:4px; border:1px solid var(--line); color:var(--ink2);}
+  .board .head h2{font-size:18px;}
+  .board .head .phi{margin-left:auto; font-size:12px; color:var(--ink2); max-width:26ch; text-align:right;}
+  .stage{padding:20px; background:#fafbfc;}
+  .palette{display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap;}
+  .chip{height:26px; min-width:52px; border-radius:5px; border:1px solid rgba(0,0,0,.12); display:flex; align-items:flex-end; justify-content:center; padding-bottom:2px;}
+  .chip span{font:600 9px/1 ui-monospace,Menlo,monospace; color:rgba(255,255,255,.92); text-shadow:0 1px 2px rgba(0,0,0,.35);}
+  .chip.light span{color:#3a4356; text-shadow:none;}
+  .type{border:1px dashed var(--line); border-radius:6px; padding:10px 12px; margin-bottom:14px; background:#fff;}
+  .type .h{font-weight:700;}
+  .type .b{color:var(--ink2); font-size:13px;}
+  .wire{border:1px solid var(--line); border-radius:8px; background:#fff; overflow:hidden; min-height:230px; display:flex; flex-direction:column;}
+  .wire .bar{height:26px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:6px; padding:0 8px; font:600 9px/1 ui-monospace,Menlo,monospace; color:var(--ink2);}
+  .wire .body{flex:1; display:flex; min-height:0;}
+  .blk{border-radius:4px;}
+  .moves{padding:14px 20px 18px; border-top:1px solid var(--line);}
+  .moves h3{font:600 11px/1 ui-monospace,Menlo,monospace; letter-spacing:.08em; color:var(--ink2); margin-bottom:8px;}
+  .moves ul{list-style:none; display:flex; flex-direction:column; gap:5px;}
+  .moves li{font-size:13px; color:var(--ink); padding-left:16px; position:relative;}
+  .moves li::before{content:""; position:absolute; left:2px; top:7px; width:6px; height:6px; border-radius:2px; background:var(--dot,#888);}
+  footer.note{margin-top:30px; font-size:12.5px; color:var(--ink2); max-width:80ch;}
+  /* wireframe helper classes */
+  .col{display:flex; flex-direction:column; gap:6px; padding:8px;}
+  .row{display:flex; gap:6px;}
+  .fill{flex:1;}
+  .lbl{font:600 8.5px/1.3 ui-monospace,Menlo,monospace; color:#6b7488; padding:2px 2px 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="intro">
+  <h1>Design Direction Boards — Employee Skills Assessment &amp; Skill Management</h1>
+  <p>Six abstract direction boards derived from the reference Design DNA (see <code>design-exploration.md</code>). Each board shows palette, type posture, a layout wireframe of the primary screen, and the direction's signature moves. Wireframes are schematic — not final UI.</p>
+</header>
+<div class="grid">
+
+  <!-- OPTION A -->
+  <section class="board" style="--dot:#b4cf33">
+    <div class="head"><span class="tag">OPTION A</span><h2>Competency Ledger</h2><span class="phi">Assessment as an official, print-grade organizational document</span></div>
+    <div class="stage">
+      <div class="palette">
+        <div class="chip light" style="background:#f7f6f3"><span>F7F6F3</span></div>
+        <div class="chip light" style="background:#ffffff"><span>FFFFFF</span></div>
+        <div class="chip" style="background:#1c2b4a"><span>1C2B4A</span></div>
+        <div class="chip" style="background:#2456c4"><span>2456C4</span></div>
+        <div class="chip" style="background:#b4cf33"><span>B4CF33</span></div>
+        <div class="chip light" style="background:#e4e1da"><span>E4E1DA</span></div>
+      </div>
+      <div class="type">
+        <div class="h" style="font-size:19px; color:#1c2b4a">Assessment Record — A. Menon <span style="display:inline-block;height:3px;width:70px;background:#b4cf33;vertical-align:middle;margin-left:8px"></span></div>
+        <div class="b">Neo-grotesque body 15–16px · ruled tables · tabular figures · letterhead rule as the single brand gesture</div>
+      </div>
+      <div class="wire">
+        <div class="bar"><span style="width:10px;height:10px;border-radius:50%;background:#1c2b4a;display:inline-block"></span> LEDGER &nbsp;·&nbsp; Dashboard Employees Assessments Reports</div>
+        <div class="body">
+          <div class="col" style="width:26%; border-right:1px solid var(--line)">
+            <div class="lbl">TABLE OF CONTENTS</div>
+            <div class="blk" style="height:12px;background:#e8eefc"></div>
+            <div class="blk" style="height:12px;background:#eef0f4"></div>
+            <div class="blk" style="height:12px;background:#eef0f4"></div>
+            <div class="blk" style="height:12px;background:#eef0f4"></div>
+            <div class="lbl" style="margin-top:8px">DRAFT SAVED 10:42</div>
+          </div>
+          <div class="col fill">
+            <div class="lbl">COVER SHEET — EMPLOYEE HEADER BLOCK</div>
+            <div class="blk" style="height:34px;background:#f4f2ec;border:1px solid #e4e1da"></div>
+            <div class="row">
+              <div class="blk fill" style="height:26px;background:#f4f2ec;border:1px solid #e4e1da"></div>
+              <div class="blk fill" style="height:26px;background:#f4f2ec;border:1px solid #e4e1da"></div>
+              <div class="blk fill" style="height:26px;background:#f4f2ec;border:1px solid #e4e1da"></div>
+            </div>
+            <div class="lbl">CATEGORY PROFICIENCY TABLE (RULED)</div>
+            <div class="blk" style="height:14px;background:#fff;border-top:1px solid #cfd4dd;border-bottom:1px solid #e4e1da"></div>
+            <div class="blk" style="height:14px;background:#fff;border-bottom:1px solid #e4e1da"></div>
+            <div class="blk" style="height:14px;background:#fff;border-bottom:1px solid #e4e1da"></div>
+            <div class="lbl">MARGINALIA — GAPS &amp; RECOMMENDATIONS LEDGER</div>
+            <div class="blk" style="height:24px;background:#fbfaf7;border-left:3px solid #b4cf33"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="moves"><h3>SIGNATURE MOVES</h3><ul>
+      <li>One category per screen as a numbered "clause", sticky document header with progress + draft time</li>
+      <li>Segmented <em>word</em> control for levels (Beginner…Expert), expected level as quiet reference text</li>
+      <li>Gap = margin note: "Intermediate → Advanced · 2 levels below expectation" + 5-tick ruler</li>
+      <li>Report is WYSIWYG letterhead with signature lines; Save-as-PDF = print</li>
+    </ul></div>
+  </section>
+
+  <!-- OPTION B -->
+  <section class="board" style="--dot:#1f5ed8">
+    <div class="head"><span class="tag">OPTION B</span><h2>Skillframe Matrix</h2><span class="phi">Competence as a grid to be worked — analyst density, keyboard-fast</span></div>
+    <div class="stage">
+      <div class="palette">
+        <div class="chip light" style="background:#f4f5f7"><span>F4F5F7</span></div>
+        <div class="chip light" style="background:#ffffff"><span>FFFFFF</span></div>
+        <div class="chip" style="background:#1f5ed8"><span>1F5ED8</span></div>
+        <div class="chip" style="background:#12734a"><span>12734A</span></div>
+        <div class="chip" style="background:#b45309"><span>B45309</span></div>
+        <div class="chip light" style="background:#e2e5ea"><span>E2E5EA</span></div>
+      </div>
+      <div class="type">
+        <div class="h" style="font-size:15px">Skill Matrix — Engineering <span style="font:600 11px ui-monospace,Menlo,monospace;color:#5b6472">cycle 2026-H2</span></div>
+        <div class="b">13–14px UI type · tabular numerals · mono for IDs &amp; level codes · 32–36px rows · borders over shadows</div>
+      </div>
+      <div class="wire">
+        <div class="bar">⌕ global search &nbsp;·&nbsp; EMP-0142 &nbsp;·&nbsp; evaluator menu</div>
+        <div class="body">
+          <div class="col" style="width:20%; border-right:1px solid var(--line); background:#f7f8fa">
+            <div class="blk" style="height:12px;background:#dce7fb"></div>
+            <div class="blk" style="height:12px;background:#e8eaee"></div>
+            <div class="blk" style="height:12px;background:#e8eaee"></div>
+            <div class="blk" style="height:12px;background:#e8eaee"></div>
+            <div class="blk" style="height:12px;background:#e8eaee"></div>
+          </div>
+          <div class="col fill">
+            <div class="row" style="gap:4px">
+              <div class="blk" style="height:16px;width:52px;background:#1f5ed8"></div>
+              <div class="blk" style="height:16px;width:52px;background:#e8eaee"></div>
+              <div class="blk" style="height:16px;width:52px;background:#e8eaee"></div>
+              <div class="lbl fill" style="text-align:right">18/24 rated · Saved 14:03</div>
+            </div>
+            <div class="blk" style="height:16px;background:#eef1f5;border:1px solid #e2e5ea"></div>
+            <div class="row" style="gap:3px">
+              <div class="blk fill" style="height:14px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:16px;background:#1f5ed8"></div>
+              <div class="blk" style="height:14px;width:16px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:16px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:16px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:16px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:44px;background:#fdf1e3;border:1px solid #b45309"></div>
+            </div>
+            <div class="row" style="gap:3px">
+              <div class="blk fill" style="height:14px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:16px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:16px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:16px;background:#1f5ed8"></div>
+              <div class="blk" style="height:14px;width:16px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:16px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:44px;background:#e9f5ee;border:1px solid #12734a"></div>
+            </div>
+            <div class="row" style="gap:3px">
+              <div class="blk fill" style="height:14px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:16px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:16px;background:#1f5ed8"></div>
+              <div class="blk" style="height:14px;width:16px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:16px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:16px;background:#fff;border:1px solid #e2e5ea"></div>
+              <div class="blk" style="height:14px;width:44px;background:#fdf1e3;border:1px solid #b45309"></div>
+            </div>
+            <div class="lbl">rows = skills · columns = 5 radio level cells · ring behind cell = expected · gap chip with words</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="moves"><h3>SIGNATURE MOVES</h3><ul>
+      <li>Rating grid: arrow keys move, 1–5 rates; autosave per cell with "Saving…/Saved"</li>
+      <li>Department × category heat table with values as text + tint (never color alone)</li>
+      <li>"Gaps only" filter + severity sort turns the matrix into a gap-finding instrument</li>
+      <li>Mobile: matrix becomes stacked per-skill rating cards with 44px segmented rulers</li>
+    </ul></div>
+  </section>
+
+  <!-- OPTION C -->
+  <section class="board" style="--dot:#0e7490">
+    <div class="head"><span class="tag">OPTION C</span><h2>Pathway</h2><span class="phi">Assessment as a guided growth journey with momentum</span></div>
+    <div class="stage">
+      <div class="palette">
+        <div class="chip light" style="background:#f1f6fa"><span>F1F6FA</span></div>
+        <div class="chip light" style="background:#ffffff"><span>FFFFFF</span></div>
+        <div class="chip" style="background:#12283a"><span>12283A</span></div>
+        <div class="chip" style="background:#0e7490"><span>0E7490</span></div>
+        <div class="chip" style="background:#b45309"><span>B45309</span></div>
+        <div class="chip" style="background:#15803d"><span>15803D</span></div>
+      </div>
+      <div class="type">
+        <div class="h" style="font-size:18px; color:#12283a">Priya's growth map</div>
+        <div class="b">Friendly grotesque 15–16px, line-height 1.65 · 12px-radius cards, one soft shadow · category tint chips</div>
+      </div>
+      <div class="wire">
+        <div class="bar">PATHWAY &nbsp;·&nbsp; Home · Employees · Assessments · Reports &nbsp;·&nbsp; ◯ avatar</div>
+        <div class="body">
+          <div class="col" style="width:34%; border-right:1px solid var(--line)">
+            <div class="lbl">COMPETENCY WHEEL (6 SPOKES, LABELED)</div>
+            <svg viewBox="0 0 100 100" style="width:110px;height:110px;margin:2px auto" aria-hidden="true">
+              <polygon points="50,12 82,32 82,68 50,88 18,68 18,32" fill="#e3f1f4" stroke="#0e7490" stroke-width="1.5"/>
+              <polygon points="50,26 70,38 70,62 50,74 30,62 30,38" fill="#0e7490" opacity=".55"/>
+              <circle cx="50" cy="50" r="2.5" fill="#12283a"/>
+            </svg>
+            <div class="blk" style="height:12px;background:#e7f0f3"></div>
+            <div class="blk" style="height:12px;background:#e7f0f3"></div>
+          </div>
+          <div class="col fill">
+            <div class="lbl">JOURNEY RAIL</div>
+            <div class="row" style="align-items:center">
+              <div class="blk" style="width:10px;height:10px;border-radius:50%;background:#15803d"></div>
+              <div class="blk fill" style="height:3px;background:#cfe3e8"></div>
+              <div class="blk" style="width:12px;height:12px;border-radius:50%;background:#0e7490"></div>
+              <div class="blk fill" style="height:3px;background:#e5edf0"></div>
+              <div class="blk" style="width:10px;height:10px;border-radius:50%;border:2px solid #9fb6bd;background:#fff"></div>
+            </div>
+            <div class="row">
+              <div class="col fill" style="border:1px solid var(--line); border-radius:8px">
+                <div class="lbl" style="color:#15803d">STRENGTHS SHELF</div>
+                <div class="blk" style="height:12px;background:#e9f5ee"></div>
+                <div class="blk" style="height:12px;background:#e9f5ee"></div>
+              </div>
+              <div class="col fill" style="border:1px solid var(--line); border-radius:8px">
+                <div class="lbl" style="color:#b45309">FOCUS AREAS SHELF</div>
+                <div class="blk" style="height:12px;background:#fdf1e3"></div>
+                <div class="blk" style="height:12px;background:#fdf1e3"></div>
+              </div>
+            </div>
+            <div class="lbl">WIZARD RAIL: stations with ticks · one category per screen · 5-dot selectors · level-meaning panel</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="moves"><h3>SIGNATURE MOVES</h3><ul>
+      <li>Vertical progress rail: categories as stations (tick / filled / hollow)</li>
+      <li>Every level selection shows its plain-language meaning in a always-visible panel</li>
+      <li>Gap = filled dots vs outlined target dot joined by a bracket + sentence</li>
+      <li>Reflection screen auto-suggests editable recommendations before submit</li>
+    </ul></div>
+  </section>
+
+  <!-- OPTION D -->
+  <section class="board" style="--dot:#157f5c">
+    <div class="head"><span class="tag">OPTION D</span><h2>Assessment Studio</h2><span class="phi">Split-screen evaluator flow state, keyboard-driven sessions</span></div>
+    <div class="stage">
+      <div class="palette">
+        <div class="chip light" style="background:#ffffff"><span>FFFFFF</span></div>
+        <div class="chip light" style="background:#f9fafb"><span>F9FAFB</span></div>
+        <div class="chip" style="background:#111827"><span>111827</span></div>
+        <div class="chip" style="background:#157f5c"><span>157F5C</span></div>
+        <div class="chip" style="background:#b45309"><span>B45309</span></div>
+        <div class="chip light" style="background:#e5e7eb"><span>E5E7EB</span></div>
+      </div>
+      <div class="type">
+        <div class="h" style="font-size:15px">SESSION <span style="font:600 12px ui-monospace,Menlo,monospace">EMP-0142 · 2026-09-18</span></div>
+        <div class="b">14px grotesque · 11px uppercase tracked section labels · ui-monospace for IDs, dates, level codes B·D·I·A·E</div>
+      </div>
+      <div class="wire">
+        <div class="bar">⌘K palette &nbsp;·&nbsp; session: in progress &nbsp;·&nbsp; ◯</div>
+        <div class="body">
+          <div class="col" style="width:8%; background:#f9fafb; border-right:1px solid var(--line); align-items:center">
+            <div class="blk" style="width:14px;height:14px;background:#157f5c;border-radius:3px"></div>
+            <div class="blk" style="width:14px;height:14px;background:#e5e7eb;border-radius:3px"></div>
+            <div class="blk" style="width:14px;height:14px;background:#e5e7eb;border-radius:3px"></div>
+            <div class="blk" style="width:14px;height:14px;background:#e5e7eb;border-radius:3px"></div>
+          </div>
+          <div class="col" style="width:30%; border-right:1px solid var(--line)">
+            <div class="lbl">EMPLOYEE CONTEXT (PINNED)</div>
+            <div class="blk" style="height:30px;background:#f3f4f6;border:1px solid #e5e7eb"></div>
+            <div class="lbl">CATEGORIES + TICKS + PROGRESS RING</div>
+            <div class="blk" style="height:12px;background:#e7f3ee"></div>
+            <div class="blk" style="height:12px;background:#eef0f2"></div>
+            <div class="blk" style="height:12px;background:#eef0f2"></div>
+            <div class="lbl" style="margin-top:6px">AUTOSAVE ● 14:03</div>
+          </div>
+          <div class="col fill">
+            <div class="lbl">ACTIVE SKILL CARD (ONE AT A TIME)</div>
+            <div class="blk" style="height:22px;background:#f3f4f6;border:1px solid #e5e7eb"></div>
+            <div class="row" style="gap:3px">
+              <div class="blk fill" style="height:20px;background:#eef0f2;border:1px solid #e5e7eb"></div>
+              <div class="blk fill" style="height:20px;background:#eef0f2;border:1px solid #e5e7eb"></div>
+              <div class="blk fill" style="height:20px;background:#157f5c"></div>
+              <div class="blk fill" style="height:20px;background:#eef0f2;border:1px solid #e5e7eb"></div>
+              <div class="blk fill" style="height:20px;background:#eef0f2;border:1px solid #e5e7eb"></div>
+            </div>
+            <div class="row" style="align-items:center; gap:4px">
+              <div class="blk" style="height:8px;width:40%;background:#111827"></div>
+              <div class="blk" style="height:8px;width:60%;background:repeating-linear-gradient(45deg,#b45309 0 3px,#fff 3px 6px);border:1px solid #b45309"></div>
+              <div class="lbl">−2 levels · dev required</div>
+            </div>
+            <div class="blk" style="height:30px;background:#fff;border:1px dashed #cfd4dc"></div>
+            <div class="lbl">keys: 1–5 rate · Enter next · ⌘S save</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="moves"><h3>SIGNATURE MOVES</h3><ul>
+      <li>Session board lifecycle: To assess → In progress → In review → Issued</li>
+      <li>Dual-meter gap bar: solid = current, hatched = expected, delta in words</li>
+      <li>Command palette (Ctrl/Cmd+K) + full keyboard rating; density toggle persisted</li>
+      <li>Report compiles into a paper preview pane; print-perfect dossier</li>
+    </ul></div>
+  </section>
+
+  <!-- OPTION E -->
+  <section class="board" style="--dot:#c2542e">
+    <div class="head"><span class="tag">OPTION E</span><h2>People Canvas</h2><span class="phi">People before data — warm, humanist, conversation-record assessments</span></div>
+    <div class="stage">
+      <div class="palette">
+        <div class="chip light" style="background:#faf7f2"><span>FAF7F2</span></div>
+        <div class="chip light" style="background:#ffffff"><span>FFFFFF</span></div>
+        <div class="chip" style="background:#26221c"><span>26221C</span></div>
+        <div class="chip" style="background:#c2542e"><span>C2542E</span></div>
+        <div class="chip" style="background:#1f6f54"><span>1F6F54</span></div>
+        <div class="chip light" style="background:#e8e0d4"><span>E8E0D4</span></div>
+      </div>
+      <div class="type">
+        <div class="h" style="font-size:19px; font-family:Georgia,'Times New Roman',serif; color:#26221c">Ananya Menon</div>
+        <div class="b">Serif display for names &amp; headings · grotesque 15px UI · warm hairlines, 14px radius, whisper shadows</div>
+      </div>
+      <div class="wire">
+        <div class="bar" style="font-family:Georgia,serif; font-size:10px">Canvas &nbsp;·&nbsp; People Assessments Skills Library Reports &nbsp;·&nbsp; ⌕</div>
+        <div class="body">
+          <div class="col fill" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; padding:10px">
+            <div style="border:1px solid #e8e0d4; border-radius:10px; padding:8px; display:flex; flex-direction:column; gap:6px">
+              <div class="blk" style="height:22px;width:22px;border-radius:50%;background:#c2542e"></div>
+              <div class="blk" style="height:9px;width:70%;background:#efe9df"></div>
+              <div class="blk" style="height:6px;background:linear-gradient(90deg,#1f6f54 0 55%,#e8e0d4 55% 100%)"></div>
+              <div class="blk" style="height:10px;width:46%;background:#fdf1e3;border:1px solid #9a6b15;border-radius:8px"></div>
+            </div>
+            <div style="border:1px solid #e8e0d4; border-radius:10px; padding:8px; display:flex; flex-direction:column; gap:6px">
+              <div class="blk" style="height:22px;width:22px;border-radius:50%;background:#1f6f54"></div>
+              <div class="blk" style="height:9px;width:60%;background:#efe9df"></div>
+              <div class="blk" style="height:6px;background:linear-gradient(90deg,#1f6f54 0 80%,#e8e0d4 80% 100%)"></div>
+              <div class="blk" style="height:10px;width:40%;background:#e9f5ee;border:1px solid #1f6f54;border-radius:8px"></div>
+            </div>
+            <div style="border:1px solid #e8e0d4; border-radius:10px; padding:8px; display:flex; flex-direction:column; gap:6px">
+              <div class="blk" style="height:22px;width:22px;border-radius:50%;background:#9a6b15"></div>
+              <div class="blk" style="height:9px;width:66%;background:#efe9df"></div>
+              <div class="blk" style="height:6px;background:linear-gradient(90deg,#1f6f54 0 35%,#e8e0d4 35% 100%)"></div>
+              <div class="blk" style="height:10px;width:50%;background:#fdf1e3;border:1px solid #9a6b15;border-radius:8px"></div>
+            </div>
+            <div class="lbl" style="grid-column:1/-1">TEAM WALL — monogram · serif name · competency summary bar · gap-count chip · status line</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="moves"><h3>SIGNATURE MOVES</h3><ul>
+      <li>Team wall of human cards with filter bar (search / department / status / gaps-only)</li>
+      <li>Assessment as category accordions; pill radio levels reveal plain-language meanings</li>
+      <li>Gap = badge-pair sentence: solid "Current" pill + outlined "Role expects" pill + words</li>
+      <li>Report closes with the evaluator's note in a tinted quote panel</li>
+    </ul></div>
+  </section>
+
+  <!-- OPTION F -->
+  <section class="board" style="--dot:#1f5ed8">
+    <div class="head"><span class="tag">OPTION F</span><h2>Clearline HR</h2><span class="phi">Conventional HRIS language — zero training cost, corrected hierarchy</span></div>
+    <div class="stage">
+      <div class="palette">
+        <div class="chip light" style="background:#f5f6f8"><span>F5F6F8</span></div>
+        <div class="chip light" style="background:#ffffff"><span>FFFFFF</span></div>
+        <div class="chip" style="background:#1f5ed8"><span>1F5ED8</span></div>
+        <div class="chip" style="background:#1f2430"><span>1F2430</span></div>
+        <div class="chip" style="background:#b42318"><span>B42318</span></div>
+        <div class="chip light" style="background:#d9dee7"><span>D9DEE7</span></div>
+      </div>
+      <div class="type">
+        <div class="h" style="font-size:16px">Assessments <span style="font-weight:400; color:#5b6472; font-size:12px">Home / Assessments / New</span></div>
+        <div class="b">14px UI type · 12px table meta · utility bar + left nav + breadcrumbs + tabs + stepper · icon+text statuses</div>
+      </div>
+      <div class="wire">
+        <div class="bar" style="background:#1f2430; color:#cfd6e4; border-bottom:none">org switcher · help · 🔔 · user</div>
+        <div class="body">
+          <div class="col" style="width:20%; border-right:1px solid var(--line)">
+            <div class="blk" style="height:12px;background:#dce7fb;border-left:3px solid #1f5ed8"></div>
+            <div class="blk" style="height:12px;background:#eef0f3"></div>
+            <div class="blk" style="height:12px;background:#eef0f3"></div>
+            <div class="blk" style="height:12px;background:#eef0f3"></div>
+            <div class="blk" style="height:12px;background:#eef0f3"></div>
+          </div>
+          <div class="col fill">
+            <div class="row" style="align-items:center; gap:4px">
+              <div class="blk" style="height:14px;width:44px;background:#1f5ed8;border-radius:7px"></div>
+              <div class="blk fill" style="height:2px;background:#d9dee7"></div>
+              <div class="blk" style="height:14px;width:44px;background:#eef0f3;border-radius:7px"></div>
+              <div class="blk fill" style="height:2px;background:#d9dee7"></div>
+              <div class="blk" style="height:14px;width:44px;background:#eef0f3;border-radius:7px"></div>
+              <div class="blk fill" style="height:2px;background:#d9dee7"></div>
+              <div class="blk" style="height:14px;width:44px;background:#eef0f3;border-radius:7px"></div>
+            </div>
+            <div class="lbl">STEPPER: Employee → Categories → Ratings → Review → Submit</div>
+            <div class="blk" style="height:16px;background:#eef1f5;border:1px solid #d9dee7"></div>
+            <div class="row" style="gap:3px">
+              <div class="blk fill" style="height:14px;background:#fff;border:1px solid #d9dee7"></div>
+              <div class="blk" style="height:14px;width:60px;background:#fff;border:1px solid #d9dee7"></div>
+              <div class="blk" style="height:14px;width:70px;background:#fff;border:1px solid #1f5ed8"></div>
+              <div class="blk" style="height:14px;width:14px;background:#fff;border:1px solid #d9dee7"></div>
+            </div>
+            <div class="row" style="gap:3px">
+              <div class="blk fill" style="height:14px;background:#fff;border:1px solid #d9dee7"></div>
+              <div class="blk" style="height:14px;width:60px;background:#fff;border:1px solid #d9dee7"></div>
+              <div class="blk" style="height:14px;width:70px;background:#fff;border:1px solid #d9dee7"></div>
+              <div class="blk" style="height:14px;width:14px;background:#fff;border:1px solid #d9dee7"></div>
+            </div>
+            <div class="row" style="justify-content:flex-end; gap:4px; margin-top:2px">
+              <div class="blk" style="height:16px;width:64px;background:#fff;border:1px solid #d9dee7"></div>
+              <div class="blk" style="height:16px;width:64px;background:#1f5ed8"></div>
+            </div>
+            <div class="lbl">rating table: expected read-only · current select · improvement checkbox · inline comment · one primary button</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="moves"><h3>SIGNATURE MOVES</h3><ul>
+      <li>5-step stepper wizard with validation summary before review; save &amp; exit anywhere</li>
+      <li>Tabbed employee profile (Overview · Skills · Assessments · Reports · Development)</li>
+      <li>Gap analysis table with severity chips + icons and suggested actions column</li>
+      <li>Report toolbar: Print · Export PDF · Share; print CSS with page-break rules</li>
+    </ul></div>
+  </section>
+
+</div>
+<footer class="note">Boards are schematic visual aids for direction selection only. Full rationale, per-option specifications (navigation, dashboard, assessment, gaps, reports, mobile, interaction), the reference Design DNA with OBSERVATION/INFERENCE tagging, and the neutral comparison table live in <code>design-exploration.md</code>. Implementation begins only after a direction is chosen.</footer>
+</div>
+</body>
+</html>
